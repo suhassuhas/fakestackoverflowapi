@@ -1,2 +1,5 @@
 /node_modules
 /tst.js
+/some_imp_func.js
+/db.js
+/request.rest
