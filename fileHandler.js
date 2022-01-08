@@ -48,7 +48,8 @@ async function ReadQuestions () {
 
 async function WriteQuestions (data) {
     let UsersDB = await ReadQuestions()
-    UsersDB.Users.push(data)
+    //console.log(UsersDB)
+    UsersDB.Questions.push(data)
     try {
         JSON.stringify(UsersDB, null, ' ');
         await fs.writeJson('./Questions.json',UsersDB)
@@ -60,7 +61,7 @@ async function WriteQuestions (data) {
 
 
 async function ReadAnswers () {
-    const [err,data]= await promiseHandle(fs.readJson('./Questions.json'))
+    const [err,data]= await promiseHandle(fs.readJson('./Answers.json'))
     if(err || !data) {
         if (err) return Promise.reject(`Error reading file, file not exist`);
         return Promise.reject(`Error!! No data..`);
@@ -70,10 +71,10 @@ async function ReadAnswers () {
 
 async function WriteAnswers (data) {
     let UsersDB = await ReadAnswers()
-    UsersDB.Users.push(data)
+    UsersDB.Answers.push(data)
     try {
         JSON.stringify(UsersDB, null, ' ');
-        await fs.writeJson('./Questions.json',UsersDB)
+        await fs.writeJson('./Answers.json',UsersDB)
         return Promise.resolve("Succes Writing to file");
     } catch{
         return Promise.reject(`Error reading file, file not exist`);
@@ -101,27 +102,6 @@ async function updateqid() {
         return Promise.reject(`Error reading file, file not exist`);
     } 
 }
-
-// readqid().then((data)=>{
-//     console.log(data)
-// })
-
-// updateqid().then((data)=>{
-//     console.log(data)
-// })
-
-// ReadUsers().then((data) => {
-//     console.log(data)
-// }).catch((err) => {
-//     console.log(err)
-// })
-
-// WriteUser(User1).then((data)=>{
-//     console.log(data)
-// }).catch((err)=>{
-//     console.log(err)
-// })
-
 
 module.exports = {
     ReadUsers,WriteUser,ReadQuestions,WriteQuestions,ReadAnswers,WriteAnswers,readqid,updateqid
