@@ -27,6 +27,7 @@
 const fileHandler = require('./fileHandler')
 const validator = require('validator')
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken')
 
 
 const strStr = function (haystack, needle) {
@@ -124,39 +125,20 @@ async function checkUserCreditianls(req,res,next) {
 }
 
 
-
-// function checkUserCreditianls(req) {
-//     const username = req.username;
-//     const password = req.password;
-//     const user_in_db = Users.find((usr)=>usr.username == username)
-//     if(user_in_db == undefined) {
-//         //res.status(400).json({"message":"Username not found please register"})
-//         return [false,"Username not found please register"]
-//     } else if (user_in_db.password != password) {
-//         //res.status(400).json({"message":"Sorry invalid credentials"})
-//         return [false,"Sorry invalid credentials"]
-//     }
-//     return [true,"user logged in succesfully"]
-// }
-
-// function checkQuestionExist(question_id) {
-//     index = question.findIndex((q)=>{
-//         console.log(q.question_id,qid)
-//         return q.question_id == question_id
-//     })
-//     console.log(index)
-//     return index
-// }
-
-// function checkAnswerExist(question_id,user_name) {
-//     index = answer.findIndex((a)=> {
-//         return question_id == a.question_id && user_name == a.username
-//     })
-//     return index
-// }
+function authenticateToken(req,res,next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    if(token == null) return res.status(401).json({"message":"No Token"})
+    
+    jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,(err,user)=>{
+        if(err) return res.status(403).json({"message":"invalid token"})
+        req.user = user
+        next()
+    })
+}
 
 
 module.exports ={
     // checkUserInfo,checkUserCreditianls,checkQuestionExist,checkAnswerExist,getUsers
-    getUsers,checkUserInfo,addUser,checkUserCreditianls,addQuestion,getQuestions,getAnswers,addAnswers
+    getUsers,checkUserInfo,addUser,checkUserCreditianls,addQuestion,getQuestions,getAnswers,addAnswers,authenticateToken
 }

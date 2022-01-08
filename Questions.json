@@ -8,7 +8,20 @@
         {
             "title": "how to write nodejs program",
             "body": "I'm trying to build rest api with node and express js, I get error as express is missing",
-            "question_id": 102
+            "question_id": 102,
+            "username": "suhas90@gmail.com"
+        },
+        {
+            "title": "how to write nodejs program",
+            "body": "why i should choose nodejs",
+            "question_id": 103,
+            "username": "suhas90@gmail.com"
+        },
+        {
+            "title": "how to write python program",
+            "body": "how to write json parser for python",
+            "question_id": 104,
+            "username": "suhas90@gmail.com"
         }
     ]
 }

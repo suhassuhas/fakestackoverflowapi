@@ -5,7 +5,9 @@ const bodyParser = require('body-parser');
 const utils = require('./utils');
 const fileHandler = require('./fileHandler')
 const bcrypt = require('bcrypt');
-const { updateqid } = require('./fileHandler');
+const jwt = require('jsonwebtoken')
+
+const e = require('dotenv').config()
 
 app.use(bodyParser.json());
 
@@ -37,7 +39,11 @@ app.post('/register',utils.checkUserInfo,async (req,res) => {
 });
 
 app.post('/login',utils.checkUserCreditianls,async (req,res) => {
-    res.status(200).json({"message":"Succesfully logged in "})
+    const user = req.body
+    console.log(user,process.env.ACCESS_TOKEN_SECRET)
+    const accessToken = jwt.sign(user,process.env.ACCESS_TOKEN_SECRET)
+    res.status(200).json({"message":"Succesfully logged in ","access_token":accessToken})
+
 })
 
 app.post('/question',utils.checkUserCreditianls,async (req,res) => {
@@ -57,7 +63,7 @@ app.post('/question',utils.checkUserCreditianls,async (req,res) => {
             username : req.body.user_details.username
         }
         utils.addQuestion(data).then((d) => {
-            res.status(200).json({"message":"Question posted Succesful"})
+            res.status(200).json({"message":"Question posted Succesful","qid":qid.qid})
         }).catch((err)=>{
             console.log(err)
             res.status(500).json({"message":"Failed to Post question"})
@@ -109,54 +115,29 @@ app.post('/question/:qid/answer',utils.checkUserCreditianls,async (req,res) => {
         console.log(err)
         res.status(500).json({"message":"Serv Fail !! ga"})
     })
-
-   
+  
 });
 
-
-//app.get('/question/:qid',utils.checkUserCreditianls,async (req,res) => {
-
-// app.post('/question/:qid/answer',(req,res) => {
-//     const check = utils.checkUserCreditianls(req.body.user_details)
-//     const question_id = req.params.qid
-//     if(check[0] == true){
-//         if(utils.checkQuestionExist(question_id)!=-1){
-//             const answered = utils.checkAnswerExist(question_id,req.body.user_details.username)
-//             if(answered != -1) {
-//                 utils.answer[answered].body = req.body.question.answer;
-//                 res.status(200).json({"message":"Answer updated successfully","question_id":question_id});
-//             }  else {
-//                 const body = {
-//                     "answer":req.body.question.answer,
-//                     "question_id":question_id,
-//                     "username":req.body.user_details.username
-//                 }
-//                 utils.answer.push(body)
-//                 res.status(200).json({"message":"Answer posted successfully","question_id":question_id});
-//             }
-//         } else {
-//             res.status(400).json({"message":"Question Doesn't exist","question_id":question_id})
-//         }
-//     } else {
-//         res.status(400).json({
-//             "message":check[1],
-//             "question_id":question_id
-//         })
-//     }
-// })
-
-     // if(check[0]==true){
-    //     const index = utils.checkQuestionExist(req.params.qid)
-    //     if(index != -1) {
-    //         const ans = utils.answer.filter((a)=>a.question_id == req.params.qid)
-    //         const que = utils.question[index]
-    //         res.status(200).json({que,ans})
-    //     } else {
-    //         res.status(400).json({"message":"Question doesn't exist"})
-    //     }
-    // } else {
-    //     res.status(400).json({"message":check[1]});
-    // } 
+app.get('/question/:qid/',utils.authenticateToken,async (req,res)=>{
+    const qid = req.params.qid
+    let qaobj = null
+    try {
+        const quesA = await utils.getQuestions()
+        const ansA = await utils.getAnswers()
+        const que = quesA.Questions.find((q) => q.question_id == qid)
+        const ans = ansA.Answers.find((a) => a.question_id == qid)
+        if(que == undefined) {
+            res.status(401).json({"message":"Question doesnt exist with this question id"})
+        }else if(ans == undefined ) {
+            res.status(201).json({"question":que,"message":"No Answers yet"})
+        } else {
+            res.status(201).json({"question":que,"answers":ans})
+        }
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({"message":"Server Error !!!"})
+    }
+})
 
 app.listen(port,()=>{
     console.log("Hello... express server running");
