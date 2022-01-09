@@ -41,6 +41,12 @@
             "username": "mithun11@gmail.com",
             "answer": "some relevant answer",
             "answer_id": 207
+        },
+        {
+            "question_id": 106,
+            "username": "mithun11@gmail.com",
+            "answer": "In Python list, we can count the occurrences of an individual element by using a <count()> function.",
+            "answer_id": 219
         }
     ]
 }

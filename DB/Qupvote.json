@@ -1,8 +1,1 @@
-{
-    "Question_Votes":[
-        {
-            "question_id":101,
-            "votes":1
-        }
-    ]
-}
+{"Question_Votes":[{"question_id":101,"votes":1},{"question_id":106,"votes":1}]}

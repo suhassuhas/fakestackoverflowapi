@@ -1,7 +1,8 @@
 const fileHandler = require('./fileHandler')
 const validator = require('validator')
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const fs = require('fs-extra')
 
 const strStr = function (haystack, needle) {
     if (needle.length === 0) return 0;
@@ -16,6 +17,19 @@ const strStr = function (haystack, needle) {
   
     return -1;
 }
+
+
+function authenticateToken(req,res,next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    if(token == null) return res.status(401).json({"message":"No Token"})
+    
+    jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,(err,user)=>{
+        if(err) return res.status(403).json({"message":"invalid token"})
+        next()
+    })
+}
+
 
 //util functions
 async function getUsers(){
@@ -44,6 +58,14 @@ async function addUser(data) {
 
 async function addQuestion(data) {
     return await fileHandler.WriteQuestions(data)
+}
+
+async function getComments(){
+    return await fileHandler.ReadComments()
+}
+
+async function addComment(data) {
+    return await fileHandler.WriteComments(data)
 }
 
 async function checkUserInfo(req,res,next){
@@ -99,19 +121,63 @@ async function checkUserCreditianls(req,res,next) {
 }
 
 
-function authenticateToken(req,res,next) {
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1]
-    if(token == null) return res.status(401).json({"message":"No Token"})
-    
-    jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,(err,user)=>{
-        if(err) return res.status(403).json({"message":"invalid token"})
-        req.user = user
-        next()
+
+async function updateQvote(qid,uprdwn) {
+    let UsersDB = await fileHandler.readQvotes()
+    let rQvote = UsersDB.Question_Votes.find((u)=>{
+        return u.question_id == qid
     })
+    if(!rQvote) {
+        return 1
+    }
+    UsersDB.Question_Votes = UsersDB.Question_Votes.filter((u)=>{
+        return !(u.question_id == qid)
+    })
+    const upvote = uprdwn == "upvote" ? 1 :-1
+    const uQvote = {
+        "question_id":rQvote.question_id,
+        "votes":rQvote.votes+upvote
+    }
+    UsersDB.Question_Votes.push(uQvote)
+    JSON.stringify(UsersDB, null, ' ')
+    try {
+        await fs.writeJson('./DB/Qupvote.json',UsersDB)
+        return 0
+    } catch (e) {
+        console.log(e)
+        return -1
+    }
+}
+
+async function updateAvote(aid,uprdwn) {
+    let UsersDB = await fileHandler.readAvotes()
+    let rQvote = UsersDB.Answer_Votes.find((u)=>{
+        return u.answer_id == aid
+    })
+    if(!rQvote) {
+        return 1
+    }
+    UsersDB.Answer_Votes = UsersDB.Answer_Votes.filter((u)=>{
+        return !(u.answer_id == aid)
+    })
+    const upvote = uprdwn == "upvote" ? 1 :-1
+    const uAvote = {
+        "answer_id":rQvote.answer_id,
+        "votes":rQvote.votes+upvote
+    }
+    UsersDB.Answer_Votes.push(uAvote)
+    JSON.stringify(UsersDB, null, ' ');
+    try {
+        await fs.writeJson('./DB/Aupvote.json',UsersDB)
+        return 0
+    } catch (e) {
+        return -1
+    }
 }
 
 
 module.exports ={
-    getUsers,checkUserInfo,addUser,checkUserCreditianls,addQuestion,getQuestions,getAnswers,addAnswers,authenticateToken,deleteAnswers
+    getUsers,checkUserInfo,addUser,checkUserCreditianls,addQuestion,
+    getQuestions,getAnswers,addAnswers,authenticateToken,deleteAnswers,
+    getComments,addComment,updateQvote,updateAvote
 }

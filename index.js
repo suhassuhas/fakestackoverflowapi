@@ -56,6 +56,12 @@ app.post('/question',utils.checkUserCreditianls,async (req,res) => {
             console.log(err)
         })
 
+        fileHandler.addQvote(qid).then((msg)=>{
+            console.log(msg)
+        }).catch((err)=>{
+            console.log(err)
+        })
+
         const data = {
             title,
             body,
@@ -82,12 +88,19 @@ app.post('/question/:qid/answer',utils.checkUserCreditianls,async (req,res) => {
     let {question_id,answer} = req.body.question
 
     let qqid = await fileHandler.readqid()
-    console.log("aid : ",qqid.aid)
-    fileHandler.updateaid().then((msg)=>{
+    //console.log("aid : ",qqid.aid)
+    await fileHandler.updateaid().then((msg)=>{
         console.log(msg)
     }).catch((err)=>{
         console.log(err)
     })
+    
+    await fileHandler.addAvote(qqid).then((msg)=>{
+        console.log(msg)
+    }).catch((err)=>{
+        console.log(err)
+    })
+
 
     let answer_obj= {
         question_id,
@@ -142,7 +155,7 @@ app.post('/question/:qid/answer',utils.checkUserCreditianls,async (req,res) => {
                     console.log(e)
                     res.status(200).json({"message":"Server Fail !!! "})
                 }
-              }, 100);
+              }, 200);
             
 
         } else {
@@ -175,6 +188,156 @@ app.get('/question/:qid/',utils.authenticateToken,async (req,res)=>{
         res.status(500).json({"message":"Server Error !!!"})
     }
 })
+
+app.post('/posts/:qid/comment',utils.authenticateToken,async (req,res)=>{
+    try{
+        const authHeader = req.headers['authorization']
+        const token = authHeader && authHeader.split(' ')[1]
+        const getusername = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
+        const comment = {
+            "question_id": parseInt(req.params.qid)*1,
+            "comment": req.body.comment,
+            "username":getusername.username
+        }
+        utils.addComment(comment).then((d) => {
+            res.status(200).json({"message":"Comment posted Succesful","question_id":req.params.qid})
+        }).catch((err)=>{
+            console.log(err)
+            res.status(500).json({"message":"Failed to Post comment"})
+        })
+    } catch (er) {
+        res.status(500).json({"message":"Server Fail !! comment"})
+    }
+
+})
+
+app.get('/posts/:qid',utils.authenticateToken,async (req,res)=>{
+    try{
+        const qid = req.params.qid
+        const aobj = []
+        const quesA = await utils.getQuestions()
+        const ansA = await utils.getAnswers()
+        const ans = ansA.Answers.filter((a) => a.question_id == qid)
+        const aid_arr = ans.map((u)=>u.answer_id)
+        const commA = await utils.getComments()
+        const qvotes = await fileHandler.readQvotes()
+        const avotes = await fileHandler.readAvotes()
+        const que = quesA.Questions.find((q) => q.question_id == qid)
+        
+        const comments = commA.Comments.filter((c) => c.question_id == qid)
+
+        const qvote = qvotes.Question_Votes.find((q)=>q.question_id == qid)
+
+        const avote_arr = avotes.Answer_Votes.filter(element => {
+            return aid_arr.includes(element.answer_id)
+        });
+
+
+        let ansobj = []
+        if(!que) {
+            res.status(400).json({"message":`No questions with this ${qid}`})
+        }        
+        if(!ans) {
+            ansobj = ["No answers yet"]
+        } else {
+            ans.forEach((element,index) => {
+                ansobj.push({
+                    "answer":element.answer,
+                    "answer_id":element.answer_id,
+                    "username":element.username,
+                    "votes": avote_arr[index].votes
+                })
+            });
+        }
+
+        res.status(200).json({
+            "Question":{
+                "Title":que.title,
+                "Body":que.body,
+                "question_id":que.id,
+                "votes":qvote.votes},
+            "Answer":ansobj,
+            "comments":comments
+        })
+
+    } catch (e){
+        console.log(e)
+        res.status(500).json({"message":"Serv fail !! get post"})
+    }
+})
+
+app.post('/posts/:qid/upvote/question',utils.authenticateToken,async (req,res)=>{
+    try {
+        const qid = req.params.qid
+        let uprdown = "upvote"
+        const st = await utils.updateQvote(qid,uprdown)
+        if(st == 0) {
+            res.status(200).json({"message":`Upvoted question id ${qid} Succesfully`})
+        } else if(st == 1) {
+            res.status(400).json({"message":`Question id ${qid} does not exist`})
+        } else {
+            throw "Server Fail Error"
+        }
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({"message":"Server Fail !! Question upvote"})
+    }
+}) 
+
+app.post('/posts/:qid/downvote/question',utils.authenticateToken,async (req,res)=>{
+    try {
+        const qid = req.params.qid
+        let uprdown = "downvote"
+        const st = await utils.updateQvote(qid,uprdown)
+        if(st == 0) {
+            res.status(200).json({"message":`Downvoted question id ${qid} Succesfully`})
+        } else if(st == 1) {
+            res.status(200).json({"message":`Question id ${qid} does not exist`})
+        } else {
+            throw "Server Fail Error"
+        }
+    } catch (e) {
+        res.status(500).json({"message":"Server Fail !! Question downvote"})
+    }
+})
+
+app.post('/posts/:aid/upvote/answer',utils.authenticateToken,async (req,res)=>{
+    try {
+        const aid = req.params.aid
+        let uprdown = "upvote"
+        const st = await utils.updateAvote(aid,uprdown)
+        if(st == 0) {
+            res.status(200).json({"message":`Upvoted Answer id ${aid} Succesfully`})
+        } else if(st == 1) {
+            res.status(200).json({"message":`Answer id ${aid} does not exist`})
+        } else {
+            throw "Server Fail Error"
+        }
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({"message":"Server Fail !! Answer upvote"})
+    }
+})
+
+app.post('/posts/:aid/downvote/answer',utils.authenticateToken,async (req,res)=>{
+    try {
+        const aid = req.params.aid
+        let uprdown = "downvote"
+        const st = await utils.updateAvote(aid,uprdown)
+        if(st == 0) {
+            res.status(200).json({"message":`Downvoted Answer id ${aid} Succesfully`})
+        } else if(st == 1) {
+            res.status(200).json({"message":`Answer id ${aid} does not exist`})
+        } else {
+            throw "Server Fail Error"
+        }
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({"message":"Server Fail !! Answer downvote"})
+    }
+})
+
+
 
 app.listen(port,()=>{
     console.log("Hello... express server running");

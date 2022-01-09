@@ -126,8 +126,84 @@ async function updateaid() {
     } 
 }
 
+async function readQvotes() {
+    const [err,data]= await promiseHandle(fs.readJson('./DB/Qupvote.json'))
+    if(err || !data) {
+        if (err) return Promise.reject(`Error reading file, file not exist qid`);
+        return Promise.reject(`Error!! No data..`);
+    }
+    return Promise.resolve(data);
+}
 
+async function readAvotes() {
+    const [err,data]= await promiseHandle(fs.readJson('./DB/Aupvote.json'))
+    if(err || !data) {
+        if (err) return Promise.reject(`Error reading file, file not exist qid`);
+        return Promise.reject(`Error!! No data..`);
+    }
+    return Promise.resolve(data);
+}
+
+
+async function addQvote(qid) {
+    let UsersDB = await readQvotes()
+    let data = {
+        "question_id":qid.qid,
+        "votes":0
+    }
+    UsersDB.Question_Votes.push(data)
+    try {
+        JSON.stringify(UsersDB, null, ' ');
+        await fs.writeJson('./DB/Qupvote.json',UsersDB)
+        return Promise.resolve("Succes Writing to file");
+    } catch{
+        return Promise.reject(`Error reading file, file not exist write`);
+    } 
+}
+
+async function addAvote(qid) {
+    let UsersDB = await readAvotes()
+    let data = {
+        "answer_id":qid.aid,
+        "votes":0
+    }
+    UsersDB.Answer_Votes.push(data)
+    try {
+        JSON.stringify(UsersDB, null, ' ');
+        await fs.writeJson('./DB/Aupvote.json',UsersDB)
+        return Promise.resolve("Succes Writing to file");
+    } catch{
+        return Promise.reject(`Error reading file, file not exist write`);
+    } 
+}
+
+async function ReadComments() {
+    const [err,data]= await promiseHandle(fs.readJson('./DB/Comments.json'))
+    if(err || !data) {
+        if (err) return Promise.reject(`Error reading file, file not exist qid`);
+        return Promise.reject(`Error!! No data..`);
+    }
+    return Promise.resolve(data);
+}
+
+async function WriteComments(comment) {
+
+    let UsersDB = await ReadComments()
+    //console.log(UsersDB)
+    UsersDB.Comments.push(comment)
+    try {
+        JSON.stringify(UsersDB, null, ' ');
+        await fs.writeJson('./DB/Comments.json',UsersDB)
+        return Promise.resolve("Succes Writing to file");
+    } catch{
+        return Promise.reject(`Error reading file, file not exist`);
+    } 
+
+}
 
 module.exports = {
-    ReadUsers,WriteUser,ReadQuestions,WriteQuestions,ReadAnswers,WriteAnswers,DeleteAnswers,readqid,updateqid,updateaid
+    ReadUsers,WriteUser,ReadQuestions,WriteQuestions,ReadAnswers,
+    WriteAnswers,DeleteAnswers,readqid,updateqid,updateaid,
+    addQvote,addAvote,readQvotes,
+    readAvotes,ReadComments,WriteComments,
 }

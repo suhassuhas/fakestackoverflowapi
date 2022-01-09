@@ -72,8 +72,8 @@ Content-type: application/json
             "password": "hippo"
       }, 
     "question": {
-        "title":"javascript IIFE", 
-        "body":"What is IIFE(Immediately Invoked Function Expression)"
+        "title":"Python count ", 
+        "body":"In Python list, we can count the occurrences of an individual element by using a <count()> function."
     }
 }
 
@@ -176,6 +176,22 @@ Content-type: application/json
 }
 
 ####
+
+post http://localhost:8080/question/106/answer
+Content-type: application/json
+
+{
+    "user_details": {
+            "username": "mithun11@gmail.com",
+            "password": "hippo"
+      }, 
+    "question": {
+        "question_id":106, 
+        "answer":"In Python list, we can count the occurrences of an individual element by using a <count()> function."
+    }
+}
+####
+
 
 post http://localhost:8080/login
 Content-type: application/json

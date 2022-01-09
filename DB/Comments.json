@@ -1,9 +1,1 @@
-{
-    "Comments": [
-        {
-            "question_id": 101,
-            "comment":"It's a stupid question",
-            "username":"mithun11@gmail.com"
-        }
-    ]
-}
+{"Comments":[{"question_id":101,"comment":"It's a stupid question","username":"mithun11@gmail.com"},{"question_id":102,"comment":"Good Question !!!","username":"mithun11@gmail.com"}]}
