@@ -25,7 +25,7 @@ function authenticateToken(req,res,next) {
     if(token == null) return res.status(401).json({"message":"No Token"})
     
     jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,(err,user)=>{
-        if(err) return res.status(403).json({"message":"invalid token"})
+        if(err) return res.status(401).json({"message":"invalid token"})
         next()
     })
 }
@@ -70,15 +70,15 @@ async function addComment(data) {
 
 async function checkUserInfo(req,res,next){
     if(req.body.registration_name == undefined) {
-        return res.status(400).json({"message":"Need to have registration name"});
+        return res.status(401).json({"message":"Need to have registration name"});
     } else if (req.body.username == undefined || !validator.isEmail(req.body.username)) {
-        return res.status(400).json({"message":"Need to have proper email"});
+        return res.status(401).json({"message":"Need to have proper email"});
     } else if (req.body.password == undefined) {
-        return res.status(400).json({"message":"please provide password"});
+        return res.status(401).json({"message":"please provide password"});
     } 
     await getUsers().then((data)=>{
         if(data.Users.some((d)=>d.username == req.body.username)){
-            return res.status(400).json({"message":"User Already exist please login"});
+            return res.status(401).json({"message":"User Already exist please login"});
         } else {
             next()
         }
@@ -101,26 +101,26 @@ async function checkUserCreditianls(req,res,next) {
     }
 
     if(pwd == undefined || usr == undefined) {
-        res.status(400).json({"message":"Input not in correct info"})
+        res.status(401).json({"message":"Input not in correct info"})
     }
 
     await getUsers().then((data)=>{
         const user = data.Users.find((d)=>d.username == usr)
         userobj = user
         if(user == null){
-            return res.status(400).json({"message":"User not found"})
+            return res.status(401).json({"message":"User not found"})
         }
     })
         if(userobj) {
             if(await bcrypt.compare(pwd,userobj.hashedpwd)) {
                 next()
             } else {
-                return res.status(400).json({"message":"Invalid Credintials"})
+                return res.status(401).json({"message":"Invalid Credintials"})
             }
         }
     } catch(e) {
         console.log(e)
-        return res.status(500).json({"message":"Serv fail !!!!"})
+        return res.status(501).json({"message":"Serv fail !!!!"})
     }
 }
 

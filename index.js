@@ -20,13 +20,13 @@ app.post('/register',utils.checkUserInfo,async (req,res) => {
             registration_name,username,hashedpwd
         }
         utils.addUser(data).then((d) => {
-            res.status(200).json({"message":"User Registered Succesfully"})
+            res.status(201).json({"message":"User Registered Succesfully"})
         }).catch((err)=>{
-            res.status(500).json({"message":"Failed to Register"})
+            res.status(503).json({"message":"Failed to Register"})
         })
     } catch(e) {
         console.log(e)
-        res.status(500).send({"message":"Failed to Register !! Serv Fail"})
+        res.status(503).send({"message":"Failed to Register !! Serv Fail"})
     }
 });
 
@@ -34,8 +34,16 @@ app.post('/login',utils.checkUserCreditianls,async (req,res) => {
     const user = req.body
     console.log(user,process.env.ACCESS_TOKEN_SECRET)
     const accessToken = jwt.sign(user,process.env.ACCESS_TOKEN_SECRET)
-    res.status(200).json({"message":"Succesfully logged in ","access_token":accessToken})
+    res.status(201).json({"message":"Succesfully logged in ","access_token":accessToken})
 
+})
+
+app.get('/question/all',utils.authenticateToken,async (req,res) => {
+    utils.getQuestions().then((data)=>{
+            res.status(201).json(data)
+        }).catch((err)=>{
+            res.status(402).json(err)
+    })
 })
 
 app.post('/question',utils.checkUserCreditianls,async (req,res) => {
@@ -61,14 +69,14 @@ app.post('/question',utils.checkUserCreditianls,async (req,res) => {
             username : req.body.user_details.username
         }
         utils.addQuestion(data).then((d) => {
-            res.status(200).json({"message":"Question posted Succesful","qid":qid.qid})
+            res.status(201).json({"message":"Question posted Succesful","qid":qid.qid})
         }).catch((err)=>{
             console.log(err)
-            res.status(500).json({"message":"Failed to Post question"})
+            res.status(501).json({"message":"Failed to Post question"})
         })
     } catch(e) {
         console.log(e)
-        res.status(500).send({"message":"Failed to Post !! Serv Fail"})   
+        res.status(501).send({"message":"Failed to Post !! Serv Fail"})   
     }
 })
 
@@ -79,7 +87,7 @@ app.post('/question/:qid/answer',utils.checkUserCreditianls,async (req,res) => {
     let qid = req.params.qid
 
     if(qid == undefined) {
-        res.status(400).json({"message":"Improper Input Format"})
+        res.status(401).json({"message":"Improper Input Format"})
     }
 
     let {question_id,answer} = req.body.question
@@ -144,24 +152,24 @@ app.post('/question/:qid/answer',utils.checkUserCreditianls,async (req,res) => {
                 try{
                     utils.addAnswers(answer_obj).then((msg)=>{
                         console.log(msg)
-                        res.status(200).json({"message":status})
+                        res.status(201).json({"message":status})
                     }).catch((err) => {
                         console.log(err)
                     })
                 } catch (e) {
                     console.log(e)
-                    res.status(500).json({"message":"Server Fail !!! "})
+                    res.status(501).json({"message":"Server Fail !!! "})
                 }
-              }, 200);
+              }, 201);
             
 
         } else {
             console.log(index)
-            res.status(400).json({"message":"Question Doesn't exist"})
+            res.status(401).json({"message":"Question Doesn't exist"})
         }
     }).catch((err)=>{
         console.log(err)
-        res.status(500).json({"message":"Serv Fail !! ga"})
+        res.status(501).json({"message":"Serv Fail !! ga"})
     })
   
 });
@@ -170,7 +178,7 @@ app.get('/question/:qid/',utils.authenticateToken,async (req,res)=>{
     const qid = req.params.qid
 
     if(qid == undefined) {
-        res.status(400).json({"message":"Improper Input Format"})
+        res.status(401).json({"message":"Improper Input Format"})
     }
 
     try {
@@ -187,14 +195,14 @@ app.get('/question/:qid/',utils.authenticateToken,async (req,res)=>{
         }
     } catch (e) {
         console.log(e)
-        res.status(500).json({"message":"Server Error !!!"})
+        res.status(501).json({"message":"Server Error !!!"})
     }
 })
 
 app.post('/posts/:qid/comment',utils.authenticateToken,async (req,res)=>{
 
     if(qid == undefined) {
-        res.status(400).json({"message":"Improper Input Format"})
+        res.status(401).json({"message":"Improper Input Format"})
     }
 
     try{
@@ -207,13 +215,13 @@ app.post('/posts/:qid/comment',utils.authenticateToken,async (req,res)=>{
             "username":getusername.username
         }
         utils.addComment(comment).then((d) => {
-            res.status(200).json({"message":"Comment posted Succesful","question_id":req.params.qid})
+            res.status(201).json({"message":"Comment posted Succesful","question_id":req.params.qid})
         }).catch((err)=>{
             console.log(err)
-            res.status(500).json({"message":"Failed to Post comment"})
+            res.status(501).json({"message":"Failed to Post comment"})
         })
     } catch (er) {
-        res.status(500).json({"message":"Server Fail !! comment"})
+        res.status(501).json({"message":"Server Fail !! comment"})
     }
 
 })
@@ -242,7 +250,7 @@ app.get('/posts/:qid',utils.authenticateToken,async (req,res)=>{
 
         let ansobj = []
         if(!que) {
-            res.status(400).json({"message":`No questions with this ${qid}`})
+            res.status(401).json({"message":`No questions with this ${qid}`})
         }        
         if(!ans) {
             ansobj = ["No answers yet"]
@@ -257,7 +265,7 @@ app.get('/posts/:qid',utils.authenticateToken,async (req,res)=>{
             });
         }
 
-        res.status(200).json({
+        res.status(201).json({
             "Question":{
                 "Title":que.title,
                 "Body":que.body,
@@ -269,7 +277,7 @@ app.get('/posts/:qid',utils.authenticateToken,async (req,res)=>{
 
     } catch (e){
         console.log(e)
-        res.status(500).json({"message":"Serv fail !! get post"})
+        res.status(501).json({"message":"Serv fail !! get post"})
     }
 })
 
@@ -279,15 +287,15 @@ app.post('/posts/:qid/upvote/question',utils.authenticateToken,async (req,res)=>
         let uprdown = "upvote"
         const st = await utils.updateQvote(qid,uprdown)
         if(st == 0) {
-            res.status(200).json({"message":`Upvoted question id ${qid} Succesfully`})
+            res.status(201).json({"message":`Upvoted question id ${qid} Succesfully`})
         } else if(st == 1) {
-            res.status(400).json({"message":`Question id ${qid} does not exist`})
+            res.status(401).json({"message":`Question id ${qid} does not exist`})
         } else {
             throw "Server Fail Error"
         }
     } catch (e) {
         console.log(e)
-        res.status(500).json({"message":"Server Fail !! Question upvote"})
+        res.status(501).json({"message":"Server Fail !! Question upvote"})
     }
 }) 
 
@@ -297,14 +305,14 @@ app.post('/posts/:qid/downvote/question',utils.authenticateToken,async (req,res)
         let uprdown = "downvote"
         const st = await utils.updateQvote(qid,uprdown)
         if(st == 0) {
-            res.status(200).json({"message":`Downvoted question id ${qid} Succesfully`})
+            res.status(201).json({"message":`Downvoted question id ${qid} Succesfully`})
         } else if(st == 1) {
-            res.status(200).json({"message":`Question id ${qid} does not exist`})
+            res.status(401).json({"message":`Question id ${qid} does not exist`})
         } else {
             throw "Server Fail Error"
         }
     } catch (e) {
-        res.status(500).json({"message":"Server Fail !! Question downvote"})
+        res.status(501).json({"message":"Server Fail !! Question downvote"})
     }
 })
 
@@ -314,15 +322,15 @@ app.post('/posts/:aid/upvote/answer',utils.authenticateToken,async (req,res)=>{
         let uprdown = "upvote"
         const st = await utils.updateAvote(aid,uprdown)
         if(st == 0) {
-            res.status(200).json({"message":`Upvoted Answer id ${aid} Succesfully`})
+            res.status(401).json({"message":`Upvoted Answer id ${aid} Succesfully`})
         } else if(st == 1) {
-            res.status(200).json({"message":`Answer id ${aid} does not exist`})
+            res.status(401).json({"message":`Answer id ${aid} does not exist`})
         } else {
             throw "Server Fail Error"
         }
     } catch (e) {
         console.log(e)
-        res.status(500).json({"message":"Server Fail !! Answer upvote"})
+        res.status(501).json({"message":"Server Fail !! Answer upvote"})
     }
 })
 
@@ -332,15 +340,15 @@ app.post('/posts/:aid/downvote/answer',utils.authenticateToken,async (req,res)=>
         let uprdown = "downvote"
         const st = await utils.updateAvote(aid,uprdown)
         if(st == 0) {
-            res.status(200).json({"message":`Downvoted Answer id ${aid} Succesfully`})
+            res.status(201).json({"message":`Downvoted Answer id ${aid} Succesfully`})
         } else if(st == 1) {
-            res.status(200).json({"message":`Answer id ${aid} does not exist`})
+            res.status(401).json({"message":`Answer id ${aid} does not exist`})
         } else {
             throw "Server Fail Error"
         }
     } catch (e) {
         console.log(e)
-        res.status(500).json({"message":"Server Fail !! Answer downvote"})
+        res.status(501).json({"message":"Server Fail !! Answer downvote"})
     }
 })
 
