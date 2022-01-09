@@ -78,7 +78,7 @@ Content-type: application/json
         "question_id":102, \
         "answer":"You can use the following command => 'python -m pdb python-script.py'"\
     }\
-}\
+}
 
 ## Get Answer for a question id
 
@@ -89,47 +89,47 @@ Authorization: Bearer "Token"
 ## Get All Questions
 
 ### Example
-get http://localhost:8080/question/all\
+get http://localhost:8080/question/all \
 Authorization: Bearer "Token"
 
 
 ## Upvote a question 
 
 ### Example 
-post http://localhost:8080/posts/:qid/upvote/question\
+post http://localhost:8080/posts/:qid/upvote/question \
 Authorization: Bearer "Token"
 
 
 ## Downvote a question 
 
 ### Example 
-post http://localhost:8080/posts/:qid/downvote/question\
+post http://localhost:8080/posts/:qid/downvote/question \
 Authorization: Bearer "Token"
 
 
 ## Upvote a Answer 
 
 ### Example 
-post http://localhost:8080/posts/:qid/upvote/answer\
+post http://localhost:8080/posts/:qid/upvote/answer \
 Authorization: Bearer "Token"
 
 
 ## Downvote a Answer 
 
 ### Example 
-post http://localhost:8080/posts/:qid/downvote/answer\
+post http://localhost:8080/posts/:qid/downvote/answer \
 Authorization: Bearer "Token"
 
 
 ## See a post with question,answers and comments
 
 ### Example
-post http://localhost:8080/posts/:qid\
+post http://localhost:8080/posts/:qid \
 Authorization: Bearer "Token"
 
 
 ## Add a comment for a paricular question given question id
 
 ### Example
-post http://localhost:8080/posts/:qid/comment\
+post http://localhost:8080/posts/:qid/comment \
 Authorization: Bearer "Token"
