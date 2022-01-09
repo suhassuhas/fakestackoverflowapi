@@ -4,26 +4,26 @@ The application serves as a platform for users to ask and answer questions, and,
 
 ### Features Added In this API
 
-[x]Login with bcrypt hashing.
-[x]Access some resources using JWT token 
-[x]Allows to register.
-[x]Allows User to ask a question.
-[x]Allows User answer the question given the question id.
-[X]Get all the questions using JWT Token 
-[x]Get answers for the particular question given the question id using JWT Auth
-[x]Ability to upVote and downVote an particular question.
-[x]Ability to upVote and downVote an particular question.
-[x]Ability to Comment for particular question
-[x]Ability to See post for a particular question with relevant answers and comments
-[-]User badges -> Not implemented
+[x] Login with bcrypt hashing.
+[x] Access some resources using JWT token 
+[x] Allows to register.
+[x] Allows User to ask a question.
+[x] Allows User answer the question given the question id.
+[X] Get all the questions using JWT Token 
+[x] Get answers for the particular question given the question id using JWT Auth
+[x] Ability to upVote and downVote an particular question.
+[x] Ability to upVote and downVote an particular question.
+[x] Ability to Comment for particular question
+[x] Ability to See post for a particular question with relevant answers and comments
+[-] User badges -> Not implemented
 
 
-### Api endpoints and input format 
+# Api endpoints and input format 
 
 
 ## Register - Post request
 
-# Example
+### Example
 post http://localhost:8080/register
 Content-type: application/json
 
@@ -35,7 +35,7 @@ Content-type: application/json
 
 ## Login - Post request
 
-# Example
+### Example
 post http://localhost:8080/login
 Content-type: application/json
 
@@ -48,7 +48,7 @@ Content-type: application/json
 
 ## Post Question 
 
-# Example
+### Example
 post http://localhost:8080/question
 Content-type: application/json
 
@@ -65,7 +65,7 @@ Content-type: application/json
 
 ## Post Answer
 
-# Example
+### Example
 post http://localhost:8080/question/:qid/answer
 Content-type: application/json
 
@@ -83,47 +83,54 @@ Content-type: application/json
 
 ## Get Answer for a question id
 
-# Example
+### Example
 get http://localhost:8080/question/:qid
+Authorization: Bearer "Token"
+
+## Get All Questions
+
+### Example
+get http://localhost:8080/question/all
 Authorization: Bearer "Token"
 
 
 ## Upvote a question 
 
-# Example 
+### Example 
 post http://localhost:8080/posts/:qid/upvote/question
 Authorization: Bearer "Token"
 
 
 ## Downvote a question 
 
-# Example 
+### Example 
 post http://localhost:8080/posts/:qid/downvote/question
 Authorization: Bearer "Token"
 
 
 ## Upvote a Answer 
 
-# Example 
+### Example 
 post http://localhost:8080/posts/:qid/upvote/answer
 Authorization: Bearer "Token"
 
 
 ## Downvote a Answer 
 
-# Example 
+### Example 
 post http://localhost:8080/posts/:qid/downvote/answer
 Authorization: Bearer "Token"
 
 
 ## See a post with question,answers and comments
 
-## Example
+### Example
 post http://localhost:8080/posts/:qid
 Authorization: Bearer "Token"
 
 
 ## Add a comment for a paricular question given question id
 
+### Example
 post http://localhost:8080/posts/:qid/comment
 Authorization: Bearer "Token"
