@@ -66,7 +66,7 @@ Content-type: application/json
 ## Post Answer
 
 ### Example
-post http://localhost:8080/question/:qid/answer\
+post http://localhost:8080/question/:qid/answer \
 Content-type: application/json
 
 {\
