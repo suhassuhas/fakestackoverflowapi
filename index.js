@@ -80,15 +80,24 @@ app.post('/question/:qid/answer',utils.checkUserCreditianls,async (req,res) => {
     let getqid = 0
     let qid = req.params.qid
     let {question_id,answer} = req.body.question
+
+    let qqid = await fileHandler.readqid()
+    console.log("aid : ",qqid.aid)
+    fileHandler.updateaid().then((msg)=>{
+        console.log(msg)
+    }).catch((err)=>{
+        console.log(err)
+    })
+
     let answer_obj= {
         question_id,
         username : req.body.user_details.username,
-        answer : answer
+        answer : answer,
+        answer_id: qqid.aid
     }
     utils.getQuestions().then((data)=>{
-        console.log("qid : ",qid)
+        //console.log("qid : ",qid)
         let index = data.Questions.some((d) => {
-            //console.log("qid : ",qid,d.question_id)
             return d.question_id == qid
         })
         let status=""
@@ -102,15 +111,13 @@ app.post('/question/:qid/answer',utils.checkUserCreditianls,async (req,res) => {
                     ansdel = ans.Answers.find((a)=> {
                         return a.question_id == qid && a.username == answer_obj.username
                     })
-                    //console.log(ansdel)
                     status = "Answer updated"
                 } else {
                     status  = "Answer posted"
                 }
-                console.log(ansdel)
+                //console.log(ansdel)
                 return ansdel
             }).then((del)=>{
-                //console.log(del)
                 if(del != null) {
                     console.log('delete')
                     utils.deleteAnswers(del).then((d)=>{
@@ -124,12 +131,18 @@ app.post('/question/:qid/answer',utils.checkUserCreditianls,async (req,res) => {
             })
 
             setTimeout(function() {
-                utils.addAnswers(answer_obj).then((msg)=>{
-                    res.status(200).json({"message":status})
-                }).catch((err) => {
-                    console.log(err)
-                })
-              }, 200);
+                try{
+                    utils.addAnswers(answer_obj).then((msg)=>{
+                        console.log(msg)
+                        res.status(200).json({"message":status})
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+                } catch (e) {
+                    console.log(e)
+                    res.status(200).json({"message":"Server Fail !!! "})
+                }
+              }, 100);
             
 
         } else {

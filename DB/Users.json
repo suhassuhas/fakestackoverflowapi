@@ -1,0 +1,34 @@
+{
+    "Users": [
+        {
+            "registration_name": "Suhas",
+            "username": "suhas90@gmail.com",
+            "hashedpwd": "$2b$10$cNrFG9hRmK8nfJWTtF153OdM41Q0/.nkhvyuwBnXeWIMN92jOMqAG"
+        },
+        {
+            "registration_name": "Prabha",
+            "username": "prabha1973@gmail.com",
+            "hashedpwd": "$2b$10$k/wsGyIVecGUhYdwJWIBs.sEI8Ex6dxop7soZvi9iISFCQWOxEFae"
+        },
+        {
+            "registration_name": "mithun",
+            "username": "mithun11@gmail.com",
+            "hashedpwd": "$2b$10$DDrDsphEM3eEEmMtAbseJOtJalZTzhzYMi29JIhEbfHGrKtDM6nXy"
+        },
+        {
+            "registration_name": "Ravi",
+            "username": "mksrskar67@gmail.com",
+            "hashedpwd": "$2b$10$rCWAiWa.jbJTrY19wDpASutf0w4A/MiVJXkumjI0mC4M5HhKlJfWm"
+        },
+        {
+            "registration_name": "Kiran",
+            "username": "kiran79@gmail.com",
+            "hashedpwd": "$2b$10$a2ioZW2MAnEDwY6qHvQdwu31w.hsyQg/hojbxbwA2RlU51RXYmUca"
+        },
+        {
+            "registration_name": "Suhas",
+            "username": "suhas7theb2000@gmail.com",
+            "hashedpwd": "$2b$10$NNHT6DKKOE3dH4.KdoIf8eelFt9LhVZxuzhVdrLEGp3mpxcLcuRB2"
+        }
+    ]
+}
