@@ -25,24 +25,24 @@ The application serves as a platform for users to ask and answer questions, and,
 
 ### Example
 post http://localhost:8080/register \
-Content-type: application/json \
+Content-type: application/json 
 
 { \
     "registration_name": "mithun",\
     "username": "mithun11@gmail.com",\
     "password": "somepwd"\
-}\
+}
 
 ## Login - Post request
 
 ### Example
 post http://localhost:8080/login \
-Content-type: application/json \
+Content-type: application/json 
 
 {\
     "username": "mithun11@gmail.com",\
     "password": "hippo"\
-}\
+}
 
 
 
@@ -50,7 +50,7 @@ Content-type: application/json \
 
 ### Example
 post http://localhost:8080/question \
-Content-type: application/json \
+Content-type: application/json 
 
 { \
     "user_details": {\
@@ -61,13 +61,13 @@ Content-type: application/json \
         "title":"javascript modules", \
         "body":"What are modules in javascript"\
     }\
-}\
+}
 
 ## Post Answer
 
 ### Example
 post http://localhost:8080/question/:qid/answer\
-Content-type: application/json\
+Content-type: application/json
 
 {\
     "user_details": {\
@@ -84,52 +84,52 @@ Content-type: application/json\
 
 ### Example
 get http://localhost:8080/question/:qid \
-Authorization: Bearer "Token" \
+Authorization: Bearer "Token"
 
 ## Get All Questions
 
 ### Example
 get http://localhost:8080/question/all\
-Authorization: Bearer "Token"\
+Authorization: Bearer "Token"
 
 
 ## Upvote a question 
 
 ### Example 
 post http://localhost:8080/posts/:qid/upvote/question\
-Authorization: Bearer "Token"\
+Authorization: Bearer "Token"
 
 
 ## Downvote a question 
 
 ### Example 
 post http://localhost:8080/posts/:qid/downvote/question\
-Authorization: Bearer "Token"\
+Authorization: Bearer "Token"
 
 
 ## Upvote a Answer 
 
 ### Example 
 post http://localhost:8080/posts/:qid/upvote/answer\
-Authorization: Bearer "Token"\
+Authorization: Bearer "Token"
 
 
 ## Downvote a Answer 
 
 ### Example 
 post http://localhost:8080/posts/:qid/downvote/answer\
-Authorization: Bearer "Token"\
+Authorization: Bearer "Token"
 
 
 ## See a post with question,answers and comments
 
 ### Example
 post http://localhost:8080/posts/:qid\
-Authorization: Bearer "Token"\
+Authorization: Bearer "Token"
 
 
 ## Add a comment for a paricular question given question id
 
 ### Example
 post http://localhost:8080/posts/:qid/comment\
-Authorization: Bearer "Token"\
+Authorization: Bearer "Token"
