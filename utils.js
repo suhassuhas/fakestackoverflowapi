@@ -1,34 +1,7 @@
-//let qid = 101
-// let Users = [
-//     {
-//         "registration_name":"Suhas",
-//         "username":"suhas7theb2000@gmail.com",
-//         "password":"suhasravi07"
-//     }
-// ]
-
-// let question = [
-//     {
-//         "question_id":101,
-//         "title":"how to write nodejs program", 
-//         "body":"I'm trying to build rest api with node and express js, I get error as express is missing"
-//     }
-// ]
-
-// let answer = [
-//     {
-//         "question_id":101,
-//         "username":"suhas7thfeb2000@gmail.com",
-//         "body":`you need to check if the express is installed, check package.json file 
-//             under dependencies, if express exists, if not execute : npm install express, and make sure your cmd 
-//             line is where package.json`
-//     }
-// ]
 const fileHandler = require('./fileHandler')
 const validator = require('validator')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
-
 
 const strStr = function (haystack, needle) {
     if (needle.length === 0) return 0;
@@ -61,6 +34,10 @@ async function addAnswers(data) {
     return await fileHandler.WriteAnswers(data)
 }
 
+async function deleteAnswers(data) {
+    return await fileHandler.DeleteAnswers(data)
+}
+
 async function addUser(data) {
     return await fileHandler.WriteUser(data)
 }
@@ -91,11 +68,12 @@ async function checkUserCreditianls(req,res,next) {
     let pwd = ""
     let usr = ""
     let path = req.route.path
+    try {
     if(strStr(path,"login") != -1){
         pwd = req.body.password
         usr = req.body.username
     } else if(strStr(path,"question") != -1) {
-        console.log(req.body)
+        //console.log(req)
         pwd = req.body.user_details.password
         usr = req.body.user_details.username
     }
@@ -106,13 +84,9 @@ async function checkUserCreditianls(req,res,next) {
         if(user == null){
             return res.status(400).json({"message":"User not found"})
         }
-        //console.log(user)
     })
-
-    try {
         if(userobj) {
             if(await bcrypt.compare(pwd,userobj.hashedpwd)) {
-                //res.status(200).json({"message":"Succesfully logged in "})
                 next()
             } else {
                 return res.status(400).json({"message":"Invalid Credintials"})
@@ -139,6 +113,5 @@ function authenticateToken(req,res,next) {
 
 
 module.exports ={
-    // checkUserInfo,checkUserCreditianls,checkQuestionExist,checkAnswerExist,getUsers
-    getUsers,checkUserInfo,addUser,checkUserCreditianls,addQuestion,getQuestions,getAnswers,addAnswers,authenticateToken
+    getUsers,checkUserInfo,addUser,checkUserCreditianls,addQuestion,getQuestions,getAnswers,addAnswers,authenticateToken,deleteAnswers
 }

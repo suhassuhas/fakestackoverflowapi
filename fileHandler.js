@@ -1,13 +1,5 @@
 const fs = require('fs-extra')
 
-
-const User1 = {
-        "registration_name":"rasdflkvi",
-        "username":"ravi2000@gmail.com",
-        "password":"suhasravi07"
-}
-
-
 function promiseHandle(promise) {
     return promise
             .then(data => [null, data])
@@ -63,7 +55,7 @@ async function WriteQuestions (data) {
 async function ReadAnswers () {
     const [err,data]= await promiseHandle(fs.readJson('./Answers.json'))
     if(err || !data) {
-        if (err) return Promise.reject(`Error reading file, file not exist`);
+        if (err) return Promise.reject(`Error reading file, file not exist read`);
         return Promise.reject(`Error!! No data..`);
     }
     return Promise.resolve(data);
@@ -77,7 +69,25 @@ async function WriteAnswers (data) {
         await fs.writeJson('./Answers.json',UsersDB)
         return Promise.resolve("Succes Writing to file");
     } catch{
-        return Promise.reject(`Error reading file, file not exist`);
+        return Promise.reject(`Error reading file, file not exist write`);
+    } 
+}
+
+async function DeleteAnswers (data) {
+
+    let UsersDB = await ReadAnswers()
+    //console.log(UsersDB,"kfhskdfnkl")
+    UsersDB.Answers = UsersDB.Answers.filter((u)=>{
+        //console.log(u.question_id,data.question_id,u.username,data.username,"kjhfk")
+        return !(u.question_id == data.question_id && u.username == data.username)
+    })
+    //console.log(UsersDB,"afteel")
+    try {
+        JSON.stringify(UsersDB, null, ' ');
+        await fs.writeJson('./Answers.json',UsersDB)
+        return Promise.resolve("Succes Writing to file");
+    } catch(e){
+        return Promise.reject(`Error reading file, file not exist delete ${e}`);
     } 
 }
 
@@ -106,5 +116,5 @@ async function updateqid() {
 
 
 module.exports = {
-    ReadUsers,WriteUser,ReadQuestions,WriteQuestions,ReadAnswers,WriteAnswers,readqid,updateqid
+    ReadUsers,WriteUser,ReadQuestions,WriteQuestions,ReadAnswers,WriteAnswers,DeleteAnswers,readqid,updateqid
 }

@@ -1,0 +1,191 @@
+post http://localhost:8080/register
+Content-type: application/json
+
+{
+    "registration_name": "mithun",
+    "username": "mithun11@gmail.com",
+    "password": "hippo"
+}
+
+####
+
+post http://localhost:8080/register
+Content-type: application/json
+
+{
+    "registration_name": "Ravi",
+    "username": "mksrskar67@gmail.com",
+    "password": "mysoreravi"
+}
+
+####
+
+post http://localhost:8080/register
+Content-type: application/json
+
+{
+    "registration_name": "Kiran",
+    "username": "kiran79@gmail.com",
+    "password": "kiranmysore"
+}
+
+####
+
+post http://localhost:8080/question
+Content-type: application/json
+
+{
+    "user_details": {
+            "username": "mksrskar67@gmail.com",
+            "password": "mysoreravi"
+      }, 
+    "question": {
+        "title":"python debugging", 
+        "body":"How do you debug a python program?"
+    }
+}
+
+####
+
+post http://localhost:8080/question
+Content-type : application/json
+
+{
+    "user_details": {
+            "username": "kiran79@gmail.com",
+            "password": "kiranmysore"
+      }, 
+    "question": {
+        "title":"python list", 
+        "body":"How to convert a list into a string?"
+    }
+}
+
+####
+
+post http://localhost:8080/question
+Content-type: application/json
+
+{
+    "user_details": {
+            "username": "mithun11@gmail.com",
+            "password": "hippo"
+      }, 
+    "question": {
+        "title":"javascript IIFE", 
+        "body":"What is IIFE(Immediately Invoked Function Expression)"
+    }
+}
+
+####
+
+post http://localhost:8080/question
+Content-type: application/json
+
+{
+    "user_details": {
+            "username": "suhas90@gmail.com",
+            "password": "suhasravifd07"
+      }, 
+    "question": {
+        "title":"javascript modules", 
+        "body":"What are modules in javascript"
+    }
+}
+
+
+####
+
+post http://localhost:8080/question/102/answer
+Content-type: application/json
+
+{
+    "user_details": {
+            "username": "suhas90@gmail.com",
+            "password": "suhasravifd07"
+      }, 
+    "question": {
+        "question_id":102, 
+        "answer":"You can use the following command => 'python -m pdb python-script.py'"
+    }
+}
+
+####
+
+post http://localhost:8080/question/103/answer
+Content-type: application/json
+
+{
+    "user_details": {
+            "username": "suhas90@gmail.com",
+            "password": "suhasravifd07"
+      }, 
+    "question": {
+        "question_id":103, 
+        "answer":"When we want to convert a list into a string, we can use the <..join()> method which joins all the elements into one and returns as a string \n example : \n weekdays = ['sun','mon','tue','wed','thu','fri','sat'] \n listAsString = ' '.join(weekdays)"
+    }
+}
+
+####
+
+post http://localhost:8080/question/104/answer
+Content-type: application/json
+
+{
+    "user_details": {
+        "username": "kiran79@gmail.com",
+        "password": "kiranmysore"
+      }, 
+    "question": {
+        "question_id":104, 
+        "answer":"IIFE (Immediately Invoked Function Expression) is a JavaScript function that runs as soon as it is defined.The primary reason to use an IIFE is to obtain data privacy because any variables declared within the IIFE cannot be accessed by the outside world. i.e, If you try to access variables with IIFE then it throws an error"
+    }
+}
+
+####
+
+post http://localhost:8080/question/105/answer
+Content-type: application/json
+
+{
+    "user_details": {
+        "username": "kiran79@gmail.com",
+        "password": "kiranmysore"
+      }, 
+    "question": {
+        "question_id":105, 
+        "answer":"Modules refer to small units of independent, reusable code and also act as the foundation of many JavaScript design patterns. Most of the JavaScript modules export an object literal, a function, or a constructor"
+    }
+}
+
+####
+
+
+post http://localhost:8080/question/102/answer
+Content-type: application/json
+
+{
+    "user_details": {
+            "username": "mithun11@gmail.com",
+            "password": "hippo"
+      }, 
+    "question": {
+        "question_id":102, 
+        "answer":"If you want an IDE with integrated debugger, try PyScripter or VScode has extension from microsoft for python debbugging"
+    }
+}
+
+####
+
+post http://localhost:8080/login
+Content-type: application/json
+
+{
+    "username": "mithun11@gmail.com",
+    "password": "hippo"
+}
+
+####
+
+get http://localhost:8080/question/102
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pdGh1bjExQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiaGlwcG8iLCJpYXQiOjE2NDE3MDQyMjh9.f81DR91Cim5QLxijIrQDbEUYBJ-1YEccT7pD12RrI4Y

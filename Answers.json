@@ -2,18 +2,33 @@
     "Answers": [
         {
             "question_id": 101,
-            "username": "suhas7thfeb2000@gmail.com",
+            "username": "kiran79@gmail.com",
             "body": "you need to check if the express is installed, check package.json file under dependencies, if express exists, if not execute : npm install express, and make sure your cmd line is where package.json"
         },
         {
             "question_id": 102,
             "username": "suhas90@gmail.com",
-            "answer": "Some relevant Answer"
+            "answer": "You can use the following command => 'python -m pdb python-script.py'"
+        },
+        {
+            "question_id": 103,
+            "username": "suhas90@gmail.com",
+            "answer": "When we want to convert a list into a string, we can use the <..join()> method which joins all the elements into one and returns as a string \n example : \n weekdays = ['sun','mon','tue','wed','thu','fri','sat'] \n listAsString = ' '.join(weekdays)"
         },
         {
             "question_id": 104,
-            "username": "suhas90@gmail.com",
-            "answer": "Some relevant Answer"
+            "username": "kiran79@gmail.com",
+            "answer": "IIFE (Immediately Invoked Function Expression) is a JavaScript function that runs as soon as it is defined.The primary reason to use an IIFE is to obtain data privacy because any variables declared within the IIFE cannot be accessed by the outside world. i.e, If you try to access variables with IIFE then it throws an error"
+        },
+        {
+            "question_id": 105,
+            "username": "kiran79@gmail.com",
+            "answer": "Modules refer to small units of independent, reusable code and also act as the foundation of many JavaScript design patterns. Most of the JavaScript modules export an object literal, a function, or a constructor"
+        },
+        {
+            "question_id": 102,
+            "username": "mithun11@gmail.com",
+            "answer": "If you want an IDE with integrated debugger, try PyScripter or VScode has extension from microsoft for python debbugging"
         }
     ]
 }

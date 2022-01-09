@@ -88,25 +88,50 @@ app.post('/question/:qid/answer',utils.checkUserCreditianls,async (req,res) => {
     utils.getQuestions().then((data)=>{
         console.log("qid : ",qid)
         let index = data.Questions.some((d) => {
-            console.log("qid : ",qid,d.question_id)
+            //console.log("qid : ",qid,d.question_id)
             return d.question_id == qid
         })
-        let status
+        let status=""
+        let ansdel=null
         if(index){
             utils.getAnswers().then((ans) => {
-                if(ans.Answers.some((a)=>a.question_id == qid)){
+                if(ans.Answers.some((a)=> {
+                        return a.question_id == qid && a.username == answer_obj.username
+                    }))
+                { 
+                    ansdel = ans.Answers.find((a)=> {
+                        return a.question_id == qid && a.username == answer_obj.username
+                    })
+                    //console.log(ansdel)
                     status = "Answer updated"
                 } else {
                     status  = "Answer posted"
                 }
-            }).catch((err) => {
-                console.log(err)
+                console.log(ansdel)
+                return ansdel
+            }).then((del)=>{
+                //console.log(del)
+                if(del != null) {
+                    console.log('delete')
+                    utils.deleteAnswers(del).then((d)=>{
+                        console.log('delete success')
+                    }).catch((e)=>{
+                        console.log('deletefailute',e)
+                    })
+                }
+            }).catch((e)=>{
+                console.log(e)
             })
-            utils.addAnswers(answer_obj).then((msg)=>{
-                res.status(200).json({"message":status})
-            }).catch((err) => {
-                console.log(err)
-            })
+
+            setTimeout(function() {
+                utils.addAnswers(answer_obj).then((msg)=>{
+                    res.status(200).json({"message":status})
+                }).catch((err) => {
+                    console.log(err)
+                })
+              }, 200);
+            
+
         } else {
             console.log(index)
             res.status(400).json({"message":"Question Doesn't exist"})
@@ -120,12 +145,11 @@ app.post('/question/:qid/answer',utils.checkUserCreditianls,async (req,res) => {
 
 app.get('/question/:qid/',utils.authenticateToken,async (req,res)=>{
     const qid = req.params.qid
-    let qaobj = null
     try {
         const quesA = await utils.getQuestions()
         const ansA = await utils.getAnswers()
         const que = quesA.Questions.find((q) => q.question_id == qid)
-        const ans = ansA.Answers.find((a) => a.question_id == qid)
+        const ans = ansA.Answers.filter((a) => a.question_id == qid)
         if(que == undefined) {
             res.status(401).json({"message":"Question doesnt exist with this question id"})
         }else if(ans == undefined ) {
