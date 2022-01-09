@@ -11,14 +11,6 @@ const e = require('dotenv').config()
 
 app.use(bodyParser.json());
 
-app.get('/users',(req,res) => {
-   utils.getUsers().then((data)=>{
-        res.status(200).json(data)
-   }).catch((err)=>{
-        res.status(400).json(err)
-   })
-});
-
 app.post('/register',utils.checkUserInfo,async (req,res) => {
     try {
         const {registration_name,username,password} = req.body
