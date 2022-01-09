@@ -3,5 +3,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pd
 
 ####
 
-get http://localhost:8080/posts/106
+get http://localhost:8080/question/all
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pdGh1bjExQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiaGlwcG8iLCJpYXQiOjE2NDE3MDQyMjh9.f81DR91Cim5QLxijIrQDbEUYBJ-1YEccT7pD12RrI4Y
