@@ -77,6 +77,11 @@ app.post('/question/:qid/answer',utils.checkUserCreditianls,async (req,res) => {
 
     let getqid = 0
     let qid = req.params.qid
+
+    if(qid == undefined) {
+        res.status(400).json({"message":"Improper Input Format"})
+    }
+
     let {question_id,answer} = req.body.question
 
     let qqid = await fileHandler.readqid()
@@ -145,7 +150,7 @@ app.post('/question/:qid/answer',utils.checkUserCreditianls,async (req,res) => {
                     })
                 } catch (e) {
                     console.log(e)
-                    res.status(200).json({"message":"Server Fail !!! "})
+                    res.status(500).json({"message":"Server Fail !!! "})
                 }
               }, 200);
             
@@ -163,6 +168,11 @@ app.post('/question/:qid/answer',utils.checkUserCreditianls,async (req,res) => {
 
 app.get('/question/:qid/',utils.authenticateToken,async (req,res)=>{
     const qid = req.params.qid
+
+    if(qid == undefined) {
+        res.status(400).json({"message":"Improper Input Format"})
+    }
+
     try {
         const quesA = await utils.getQuestions()
         const ansA = await utils.getAnswers()
@@ -182,6 +192,11 @@ app.get('/question/:qid/',utils.authenticateToken,async (req,res)=>{
 })
 
 app.post('/posts/:qid/comment',utils.authenticateToken,async (req,res)=>{
+
+    if(qid == undefined) {
+        res.status(400).json({"message":"Improper Input Format"})
+    }
+
     try{
         const authHeader = req.headers['authorization']
         const token = authHeader && authHeader.split(' ')[1]

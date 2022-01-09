@@ -100,6 +100,10 @@ async function checkUserCreditianls(req,res,next) {
         usr = req.body.user_details.username
     }
 
+    if(pwd == undefined || usr == undefined) {
+        res.status(400).json({"message":"Input not in correct info"})
+    }
+
     await getUsers().then((data)=>{
         const user = data.Users.find((d)=>d.username == usr)
         userobj = user
