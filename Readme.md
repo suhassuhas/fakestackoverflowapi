@@ -4,18 +4,18 @@ The application serves as a platform for users to ask and answer questions, and,
 
 ### Features Added In this API
 
-[x] Login with bcrypt hashing.
-[x] Access some resources using JWT token 
-[x] Allows to register.
-[x] Allows User to ask a question.
-[x] Allows User answer the question given the question id.
-[X] Get all the questions using JWT Token 
-[x] Get answers for the particular question given the question id using JWT Auth
-[x] Ability to upVote and downVote an particular question.
-[x] Ability to upVote and downVote an particular question.
-[x] Ability to Comment for particular question
-[x] Ability to See post for a particular question with relevant answers and comments
-[-] User badges -> Not implemented
+- [x] Login with bcrypt hashing.
+- [x] Access some resources using JWT token 
+- [x] Allows to register.
+- [x] Allows User to ask a question.
+- [x] Allows User answer the question given the question id.
+- [X] Get all the questions using JWT Token 
+- [x] Get answers for the particular question given the question id using JWT Auth
+- [x] Ability to upVote and downVote an particular question.
+- [x] Ability to upVote and downVote an particular question.
+- [x] Ability to Comment for particular question
+- [x] Ability to See post for a particular question with relevant answers and comments
+- [ ] User badges -> Not implemented
 
 
 # Api endpoints and input format 
