@@ -201,14 +201,15 @@ app.get('/question/:qid/',utils.authenticateToken,async (req,res)=>{
 
 app.post('/posts/:qid/comment',utils.authenticateToken,async (req,res)=>{
 
-    if(qid == undefined) {
-        res.status(401).json({"message":"Improper Input Format"})
-    }
-
     try{
         const authHeader = req.headers['authorization']
         const token = authHeader && authHeader.split(' ')[1]
         const getusername = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
+        const quesA = await utils.getQuestions()
+        const que = quesA.Questions.find((q) => q.question_id == parseInt(req.params.qid))
+        if(!que) {
+            res.status(401).json({"message":`No questions with this ${qid}`})
+        } 
         const comment = {
             "question_id": parseInt(req.params.qid)*1,
             "comment": req.body.comment,
