@@ -1,3 +1,7 @@
+## Link to presentation
+
+https://docs.google.com/presentation/d/e/2PACX-1vQ8kgjD3jrLRBz53ctHtkIh-UFJ9zLlRVScTfAdZ28cMQD8XIj8RKixXKYzEoYjqZfttaw-uodu6TFe/pub?start=false&loop=false&delayms=60000&slide=id.g1f87997393_0_8351
+
 ## Problem Statement
 
 The application serves as a platform for users to ask and answer questions, and, through membership and active participation, to vote questions and answers up or down similar to Reddit/Stack overflow and edit questions and answers. Users of application can earn reputation points and "badges" for example, a person is awarded 10 reputation points for receiving an "up" vote on a question or an answer to a question, and can receive badges for their valued contributions, which represents a gamification of the traditional Q&A website. Users unlock new privileges with an increase in reputation like the ability to vote, comment, and even edit other people's posts
